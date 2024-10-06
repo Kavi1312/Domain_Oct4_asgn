@@ -4,9 +4,9 @@ import time
 
 # List of subdomains to check
 subdomains = [
-    "sub1.example.com",
-    "sub2.example.com",
-    "sub3.example.com"
+    "app.awesomeweb.com",
+    "awesomeweb.com",
+    "local.awesome.com"
 ]
 
 # Function to check the status of a subdomain
