@@ -138,6 +138,12 @@ curl http://localhost:8082
 curl http://localhost:8083
 If the subdomains return the expected HTML content, your setup is complete.
 
+make sure your subdomains (sub1.localhost, etc.) are mapped correctly in your hosts file to 127.0.0.1. Example entries in /etc/hosts should look like this:
+
+127.0.0.1 sub1.localhost
+127.0.0.1 sub2.localhost
+127.0.0.1 sub3.localhost
+Without this setup, the localhost subdomains won't resolve.
 Final Output
 When the script is running successfully, the output should look like this:
 
