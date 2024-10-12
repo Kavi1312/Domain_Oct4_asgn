@@ -17,12 +17,10 @@ html
 Save this file as /var/www/sub1.localhost/index.html.
 For sub2.localhost:
 html
-Copy code
 <html><body><h1>Welcome to Subdomain 2</h1></body></html>
 Save this file as /var/www/sub2.localhost/index.html.
 For sub3.localhost:
 html
-Copy code
 <html><body><h1>Welcome to Subdomain 3</h1></body></html>
 Save this file as /var/www/sub3.localhost/index.html.
 Setting Permissions:
@@ -33,8 +31,8 @@ sudo chmod -R 755 /var/www/sub3.localhost
 Step 2: Writing the Python Script
 Create the Python script (subdomstatus.py) to check the status of each subdomain by sending HTTP requests to them.
 Python Script (subdomstatus.py):
+
 python
-Copy code
 import requests
 from tabulate import tabulate  # For displaying the output in a table
 import time
