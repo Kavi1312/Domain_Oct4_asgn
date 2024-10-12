@@ -1,0 +1,170 @@
+Before you begin, ensure you have the following installed:
+Python 3.x (Check using python3 --version)
+pip (Python package manager)
+Install Python if it’s not already installed:
+sudo apt install python3
+sudo apt install python3-pip
+Step 1: Setting Up Subdomains
+Create three subdomains (sub1.localhost, sub2.localhost, and sub3.localhost) and run services on different ports (8081, 8082, and 8083).
+Creating HTML Files for Each Subdomain:
+For each subdomain, create an index.html file to serve content:
+For sub1.localhost:
+html
+Copy code
+<html><body><h1>Welcome to Subdomain 1</h1></body></html>
+Save this file as /var/www/sub1.localhost/index.html.
+For sub2.localhost:
+html
+Copy code
+<html><body><h1>Welcome to Subdomain 2</h1></body></html>
+Save this file as /var/www/sub2.localhost/index.html.
+For sub3.localhost:
+html
+Copy code
+<html><body><h1>Welcome to Subdomain 3</h1></body></html>
+Save this file as /var/www/sub3.localhost/index.html.
+Setting Permissions:
+Ensure the directories have the correct permissions:
+sudo chmod -R 755 /var/www/sub1.localhost
+sudo chmod -R 755 /var/www/sub2.localhost
+sudo chmod -R 755 /var/www/sub3.localhost
+Step 2: Writing the Python Script
+Create the Python script (subdomstatus.py) to check the status of each subdomain by sending HTTP requests to them.
+Python Script (subdomstatus.py):
+python
+Copy code
+import requests
+from tabulate import tabulate  # For displaying the output in a table
+import time
+import os
+
+# List of subdomains with corresponding ports
+subdomains = [
+    "sub1.localhost:8081",
+    "sub2.localhost:8082",
+    "sub3.localhost:8083"
+]
+
+# Function to check the status of a subdomain
+def check_status(subdomain):
+    try:
+        response = requests.get(f"http://{subdomain}", timeout=5)
+        if response.status_code == 200:
+            return "Up"
+        else:
+            return f"Down ({response.status_code})"
+    except requests.ConnectionError:
+        return "Down (Connection Error)"
+    except requests.Timeout:
+        return "Down (Timeout)"
+    except requests.RequestException as e:
+        return f"Down ({str(e)})"
+
+# Function to display the results in a table
+def display_table(subdomain_statuses):
+    os.system('cls' if os.name == 'nt' else 'clear')  # Clear the screen
+    table = []
+    for subdomain, status in subdomain_statuses.items():
+        table.append([subdomain, status])
+    print(tabulate(table, headers=["Subdomain", "Status"], tablefmt="grid"))
+
+# Function to check the status of all subdomains every minute
+def check_subdomains(subdomains):
+    try:
+        while True:
+            subdomain_statuses = {}
+            for subdomain in subdomains:
+                status = check_status(subdomain)
+                subdomain_statuses[subdomain] = status
+            display_table(subdomain_statuses)
+            time.sleep(60)  # Wait 60 seconds before checking again
+    except KeyboardInterrupt:
+        print("\nExiting the script...")
+
+# Start checking the subdomains
+check_subdomains(subdomains)
+Explanation of the Code:
+Imports:
+
+requests: Sends HTTP requests to subdomains.
+tabulate: Displays the status of subdomains in a neat table.
+time: Used to add delays between checks.
+os: Clears the terminal screen for better readability.
+Subdomain List:
+
+The subdomains list contains the subdomains and the ports they are running on.
+Main Functions:
+check_status(): Sends an HTTP GET request to each subdomain and checks if the service is "Up" (status code 200) or "Down" (Connection Error, Timeout, or other exceptions).
+display_table(): Displays the subdomain statuses in a table.
+check_subdomains(): Main loop that runs every minute to check the status of the subdomains and update the table.
+Step 3: Installing Required Python Modules
+If you haven’t installed the tabulate module, install it using pip:
+pip3 install tabulate
+Step 4: Starting the Python HTTP Servers
+For each subdomain, run a Python HTTP server on its respective port.
+For sub1.localhost:8081:
+cd /var/www/sub1.localhost
+python3 -m http.server 8081
+For sub2.localhost:8082:
+bash
+Copy code
+cd /var/www/sub2.localhost
+python3 -m http.server 8082
+For sub3.localhost:8083:
+
+cd /var/www/sub3.localhost
+python3 -m http.server 8083
+Leave each of these running in separate terminal windows.
+
+Step 5: Running the Subdomain Status Checker
+Once all subdomain servers are running, execute the Python script:
+
+
+python3 subdomstatus.py
+You should see a table displaying the status of each subdomain. The table will refresh every 60 seconds.
+
+Errors and Troubleshooting:
+Issue 1: ModuleNotFoundError: No module named 'tabulate'
+Cause: The tabulate module wasn’t installed.
+Solution: Installed tabulate using pip3 install tabulate. Ensure the script is run without sudo to use the user-installed modules.
+Issue 2: Connection Error for Subdomains
+Cause: Python HTTP servers for sub2.localhost and sub3.localhost were not running.
+Solution: Started the servers using python3 -m http.server for both subdomains.
+Step 6: Testing and Verifying Subdomain Status
+To verify that each subdomain is up and running, use curl:
+
+curl http://localhost:8081
+curl http://localhost:8082
+curl http://localhost:8083
+If the subdomains return the expected HTML content, your setup is complete.
+
+Final Output
+When the script is running successfully, the output should look like this:
+
+diff
+Copy code
++---------------------+-------------------------+
+| Subdomain           | Status                  |
++---------------------+-------------------------+
+| sub1.localhost:8081 | Up                      |
+| sub2.localhost:8082 | Up                      |
+| sub3.localhost:8083 | Up                      |
++---------------------+-------------------------+
+Summary of Commands:
+Navigating to Script Directory:
+
+cd /mnt/c/Users/Vika2/Documents/devops\ Batch\ 8/OctAsg
+Running Python Script:
+
+python3 subdomstatus.py
+Installing Required Modules:
+
+pip3 install tabulate
+Starting Python HTTP Servers:
+
+cd /var/www/sub1.localhost
+python3 -m http.server 8081
+cd /var/www/sub2.localhost
+python3 -m http.server 8082
+cd /var/www/sub3.localhost
+python3 -m http.server 8083
