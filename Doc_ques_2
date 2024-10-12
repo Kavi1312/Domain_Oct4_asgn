@@ -1,3 +1,6 @@
+question 2
+
+
 Before you begin, ensure you have the following installed:
 Python 3.x (Check using python3 --version)
 pip (Python package manager)
@@ -10,7 +13,6 @@ Creating HTML Files for Each Subdomain:
 For each subdomain, create an index.html file to serve content:
 For sub1.localhost:
 html
-Copy code
 <html><body><h1>Welcome to Subdomain 1</h1></body></html>
 Save this file as /var/www/sub1.localhost/index.html.
 For sub2.localhost:
