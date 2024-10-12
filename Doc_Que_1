@@ -1,0 +1,79 @@
+Step 1: Install Apache2
+If Apache2 is not already installed on your system, install it using the following command:
+sudo apt update
+sudo apt install apache2
+Once installed, start and enable Apache2:
+sudo systemctl start apache2
+sudo systemctl enable apache2
+Step 2: Create a Website Directory
+Create a directory to store your website files under the Apache root directory (/var/www/):
+sudo mkdir -p /var/www/awesomeweb
+Set the correct permissions for the directory:
+
+sudo chown -R $USER:$USER /var/www/awesomeweb
+sudo chmod -R 755 /var/www/awesomeweb
+Step 3: Create a Simple HTML Page
+
+sudo nano /var/www/awesomeweb/index1.html
+Step 4: Configure Apache Virtual Host
+Now, you need to configure Apache to serve your website using a custom DNS name (awesomeweb).
+Create a new Apache configuration file for your site:
+sudo nano /etc/apache2/sites-available/awesomeweb.conf
+Add the following content to the file:
+
+apache
+Copy code
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    ServerName awesomeweb
+    DocumentRoot /var/www/awesomeweb
+
+    <Directory /var/www/awesomeweb>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+Enable the new site configuration:
+sudo a2ensite awesomeweb.conf
+Disable the default site (optional):
+sudo a2dissite 000-default.conf
+Reload Apache to apply the changes:
+sudo systemctl reload apache2
+Step 5: Modify /etc/hosts to Map awesomeweb
+To access your website using awesomeweb as the domain name on your local machine, you need to add an entry to the /etc/hosts file.
+
+Open the hosts file:
+
+bash
+Copy code
+sudo nano /etc/hosts
+Add the following line to map awesomeweb to localhost:
+
+127.0.0.1 awesomeweb
+Step 6: Test Your Website
+Now, open your web browser and navigate to:
+
+http://awesomeweb
+You should see the HTML page you created earlier.
+
+Summary of Commands:
+Apache2 Setup:
+Install Apache2:
+
+sudo apt install apache2
+sudo systemctl start apache2
+sudo systemctl enable apache2
+Create website directory and HTML file:
+sudo mkdir -p /var/www/awesomeweb
+sudo nano /var/www/awesomeweb/index1.html
+Configure Apache Virtual Host:
+
+sudo nano /etc/apache2/sites-available/awesomeweb.conf
+sudo a2ensite awesomeweb.conf
+sudo systemctl reload apache2
+Edit /etc/hosts file:
+
